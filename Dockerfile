@@ -3,7 +3,11 @@ FROM alpine:3.8
 MAINTAINER Robrecht Cannoodt <robrecht@dynverse.org>
 MAINTAINER Wouter Saelens <wouter@dynverse.org>
 
+# Set up /app directory
 RUN mkdir /app
+WORKDIR /app
+COPY build.properties /app/project/build.properties
+COPY run.sh /app/run.sh
 
 # Download SBT
 RUN wget -O - https://piccolo.link/sbt-1.2.6.tgz | gunzip | tar -x -C /usr/local
@@ -27,6 +31,4 @@ RUN wget https://wiki-bsse.ethz.ch/download/attachments/26609237/sis-jhdf5-${JHD
   mv sis-jhdf5/lib /app/lib && \
   rm -rf sis-jhdf5-${JHDF5_VERSION}.zip sis-jhdf5
 
-WORKDIR /app
-
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["/app/run.sh"]
